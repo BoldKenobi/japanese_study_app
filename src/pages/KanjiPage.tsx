@@ -3,6 +3,7 @@ import { KanjiPageRoute } from "./routes"
 import type { Kanji } from "../types/subject"
 import { User } from "../misc/user"
 import { SUBJECTS } from "../const/subjects"
+import VocabDisplay from "../components/VocabDisplay"
 
 const KanjiPage = () => {
 
@@ -49,7 +50,9 @@ const KanjiPage = () => {
         </>}
         <div className="flex flex-col items-center">
             <p className="text-white text-4xl font-bold">Vocabulary</p>
-            <div className="flex justify-evenly flex-wrap gap-5 m-8">{kanji.amalgamations.map(id => <Link className="text-white" to="/vocab/$id" params={{ id: "" + id }}>{SUBJECTS[id].writing}</Link>)}</div>
+            <div className="flex justify-evenly flex-wrap gap-5 m-8">
+                {kanji.amalgamations.map(id => <VocabDisplay key={id} id={id} />)}
+            </div>
         </div>
         <p className="text-white">Level: {level}</p>
     </div>

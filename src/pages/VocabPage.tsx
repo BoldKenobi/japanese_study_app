@@ -3,6 +3,7 @@ import { VocabPageRoute } from "./routes"
 import { SUBJECTS } from "../const/subjects"
 import type { Vocab } from "../types/subject"
 import { User } from "../misc/user"
+import KanjiDisplay from "../components/KanjiDisplay"
 
 const VocabPage = () => {
 
@@ -16,7 +17,7 @@ const VocabPage = () => {
             <div className="p-8 bg-vocab rounded-2xl flex items-center justify-center border-2 border-black">
                 <p className="text-5xl text-white">{vocab.writing}</p>
             </div>
-            <p className="text-4xl text-white mt-5 font-bold">{vocab.meaning[0]}</p>
+            <p className="text-4xl text-white mt-5 font-bold text-center">{vocab.meaning[0]}</p>
             <p className="text-xl text-white mt-2">{vocab.meaning.slice(1).join(", ")}</p>
             <p className="mx-8 mt-8 text-white">{vocab.meaningMnemonic.replaceAll(/<.*?>/g, "*")}</p>
             <div className="flex gap-5 w-full mt-5 px-10">
@@ -42,7 +43,9 @@ const VocabPage = () => {
         <hr className="text-white w-9/10" />
         <div className="flex flex-col items-center">
             <p className="text-white text-4xl font-bold">Kanji</p>
-            <div className="flex justify-evenly flex-wrap gap-5 m-8">{vocab.components.map(id => <Link className="text-white" to="/kanji/$id" params={{ id: "" + id }}>{SUBJECTS[id].writing}</Link>)}</div>
+            <div className="flex justify-evenly flex-wrap gap-5 m-8">
+                {vocab.components.map(id => <KanjiDisplay key={id} id={id} />)}
+            </div>
         </div>
         <p className="text-white">Level: {level}</p>
     </div>

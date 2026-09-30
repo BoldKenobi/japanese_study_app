@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@import "./components/Spinner.css";
+@import "./components/Spinner/Spinner.css";
 
 @theme {
     --color-radical: #6CACE4;

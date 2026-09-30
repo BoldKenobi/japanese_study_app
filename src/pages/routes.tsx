@@ -2,7 +2,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, createRoute } from "@tanstack/react-router";
 import App from "../App";
 import MainPage from "./MainPage";
-import Spinner from "../components/Spinner";
+import Spinner from "../components/Spinner/Spinner";
 import KanjiPage from "./KanjiPage";
 import VocabPage from "./VocabPage";
 
