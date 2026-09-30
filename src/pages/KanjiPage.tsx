@@ -13,7 +13,7 @@ const KanjiPage = () => {
     return <div className="h-full flex flex-col items-center justify-start gap-8 pt-10">
         <Link className="text-white" to="/">To Home</Link>
         <div className="flex flex-col items-center">
-            <div className="w-50 h-50 bg-gray-500 rounded-[100px] flex items-center justify-center border-2 border-black">
+            <div className="w-40 h-40 bg-kanji rounded-[80px] flex items-center justify-center border-2 border-black">
                 <p className="text-7xl text-white">{kanji.writing}</p>
             </div>
             <p className="text-4xl text-white mt-5 font-bold">{kanji.meaning[0]}</p>

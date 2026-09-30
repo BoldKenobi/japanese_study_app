@@ -1,3 +1,9 @@
 @import "tailwindcss";
 
 @import "./components/Spinner.css";
+
+@theme {
+    --color-radical: "6CACE4";
+    --color-kanji: "#991111";
+    --color-vocab: "#663399";
+}
