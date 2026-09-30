@@ -1,0 +1,17 @@
+@layer components {
+    .spinner {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 9px solid;
+        border-color: "#FFF";
+        border-right-color: "#F00";
+        animation: spinner-anim 1s infinite linear;
+     }
+     
+     @keyframes spinner-anim {
+        to {
+           transform: rotate(1turn);
+        }
+     }
+}
