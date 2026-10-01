@@ -20,7 +20,7 @@ export type Test = {
     id: number,
     subjectType: SubjectType
     testType: TestType,
-    question: string
+    question: string | null
     possibleAnswers: string[]
 }
 
@@ -176,7 +176,7 @@ export namespace User {
                     id: review.id,
                     subjectType: SubjectType.Radical,
                     testType: TestType.Meaning,
-                    question: subject.writing,
+                    question: (subject as Radical).writing,
                     possibleAnswers: [(subject as Radical).meaning]
                 }]
             case SubjectType.Kanji:
@@ -184,7 +184,7 @@ export namespace User {
                     id: review.id,
                     subjectType: SubjectType.Kanji,
                     testType: TestType.Meaning,
-                    question: subject.writing,
+                    question: (subject as Kanji).writing,
                     possibleAnswers: (subject as Kanji).meaning
                 }]
             case SubjectType.Vocab:
@@ -192,13 +192,13 @@ export namespace User {
                     id: review.id,
                     subjectType: SubjectType.Vocab,
                     testType: TestType.Meaning,
-                    question: subject.writing,
+                    question: (subject as Vocab).writing,
                     possibleAnswers: (subject as Vocab).meaning
                 }, {
                     id: review.id,
                     subjectType: SubjectType.Vocab,
                     testType: TestType.Reading,
-                    question: subject.writing,
+                    question: (subject as Vocab).writing,
                     possibleAnswers: (subject as Vocab).reading
                 }]
             case SubjectType.KanaVocab:
@@ -206,7 +206,7 @@ export namespace User {
                     id: review.id,
                     subjectType: SubjectType.KanaVocab,
                     testType: TestType.Meaning,
-                    question: subject.writing,
+                    question: (subject as Vocab).writing,
                     possibleAnswers: (subject as Vocab).meaning
                 }]
         }
