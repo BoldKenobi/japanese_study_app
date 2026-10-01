@@ -5,7 +5,6 @@ export interface Subject {
     level: number
     position: number
     type: SubjectType
-    writing: string
     components: number[]
     amalgamations: number[]
     meaningMnemonic: string
@@ -13,6 +12,7 @@ export interface Subject {
 
 export interface Vocab extends Subject {
     type: SubjectType.Vocab | SubjectType.KanaVocab
+    writing: string
     reading: string[]
     meaning: string[]
     etymology?: string
@@ -26,6 +26,7 @@ export interface Vocab extends Subject {
 
 export interface Kanji extends Subject {
     type: SubjectType.Kanji
+    writing: string
     reading: {
         onyomi: string[]
         kunyomi: string[]
@@ -41,5 +42,6 @@ export interface Kanji extends Subject {
 
 export interface Radical extends Subject {
     type: SubjectType.Radical
+    writing: string | null
     meaning: string
 }

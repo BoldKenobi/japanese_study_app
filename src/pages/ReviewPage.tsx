@@ -5,6 +5,7 @@ import * as wanakana from 'wanakana';
 import { User } from "../misc/user";
 import { REVIEW_BATCH_SIZE, SUBJECTS } from "../const/subjects";
 import type { Kanji, Radical, Vocab } from "../types/subject";
+import Spinner from "../components/Spinner/Spinner";
 
 const ReviewPage = () => {
 
@@ -102,7 +103,7 @@ const ReviewPage = () => {
 
     return <div className="h-full flex flex-col items-center justify-start pt-10">
         <Link className="text-white" to="/">To Home</Link>
-        {tests.length > 0 && <>
+        {tests.length > 0 ? <>
             <div
                 style={{ backgroundColor: bgColor(tests[currentTestIndex].subjectType) }}
                 className="mt-8 w-full h-1/4 flex items-center justify-center"
@@ -121,7 +122,7 @@ const ReviewPage = () => {
                     onChange={e => onChangeText(e.target.value, tests[currentTestIndex].testType)}
                 />
             </form>
-        </>}
+        </> : <Spinner />}
     </div>
 }
 

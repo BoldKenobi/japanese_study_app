@@ -4,6 +4,7 @@ import type { Kanji } from "../types/subject"
 import { User } from "../misc/user"
 import { SUBJECTS } from "../const/subjects"
 import VocabDisplay from "../components/VocabDisplay"
+import RadicalDisplay from "../components/RadicalDisplay"
 
 const KanjiPage = () => {
 
@@ -48,6 +49,13 @@ const KanjiPage = () => {
             </div>
             <hr className="text-white w-9/10" />
         </>}
+        <div className="flex flex-col items-center">
+            <p className="text-white text-4xl font-bold">Radicals</p>
+            <div className="flex justify-evenly flex-wrap gap-5 m-8">
+                {kanji.components.map(id => <RadicalDisplay key={id} id={id} />)}
+            </div>
+        </div>
+        <hr className="text-white w-9/10" />
         <div className="flex flex-col items-center">
             <p className="text-white text-4xl font-bold">Vocabulary</p>
             <div className="flex justify-evenly flex-wrap gap-5 m-8">
