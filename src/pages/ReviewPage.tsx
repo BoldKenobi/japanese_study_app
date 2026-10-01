@@ -1,15 +1,14 @@
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { ReviewResult, SubjectType, TestType } from "../types/misc"
 import { useMemo, useState } from "react"
 import * as wanakana from 'wanakana';
 import { User } from "../misc/user";
-import { REVIEW_BATCH_SIZE, SUBJECTS } from "../const/subjects";
-import type { Kanji, Radical, Vocab } from "../types/subject";
 import Spinner from "../components/Spinner/Spinner";
 
 const ReviewPage = () => {
 
     const tests = useMemo(() => User.mapReviewBatchToTest(), [])
+    const navigate = useNavigate({ from: "/reviews" })
     const [currentTestIndex, setCurrentTestIndex] = useState(0)
     const [currentAnswer, setCurrentAnswer] = useState("")
     const [halfFinishedVocab, setHalfFinishedVocab] = useState(new Set<number>())
@@ -43,59 +42,32 @@ const ReviewPage = () => {
 
     const onSubmit = () => {
         let reviewResult = ReviewResult.Wrong
-        if (tests[currentTestIndex].testType === TestType.Meaning) {
-            switch (tests[currentTestIndex].subjectType) {
-                case SubjectType.Radical:
-                    if (currentAnswer.toLocaleLowerCase() === (SUBJECTS[tests[currentTestIndex].id] as Radical).meaning) {
+        switch (tests[currentTestIndex].subjectType) {
+            case SubjectType.Radical:
+            case SubjectType.Kanji:
+            case SubjectType.KanaVocab:
+                if (tests[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
+                    reviewResult = ReviewResult.Correct
+                }
+                break
+            case SubjectType.Vocab:
+                if (tests[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
+                    if (halfFinishedVocab.has(tests[currentTestIndex].id)) {
                         reviewResult = ReviewResult.Correct
+                    } else {
+                        setHalfFinishedVocab(hfV => {
+                            hfV.add(tests[currentTestIndex].id)
+                            return hfV
+                        })
                     }
-                    break
-                case SubjectType.Kanji:
-                    if ((SUBJECTS[tests[currentTestIndex].id] as Kanji).meaning.map(s => s.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
-                        reviewResult = ReviewResult.Correct
-                    }
-                    break
-                case SubjectType.KanaVocab:
-                    if ((SUBJECTS[tests[currentTestIndex].id] as Vocab).meaning.map(s => s.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
-                        reviewResult = ReviewResult.Correct
-                    }
-                    break
-                case SubjectType.Vocab:
-                    if ((SUBJECTS[tests[currentTestIndex].id] as Vocab).meaning.map(s => s.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
-                        if (halfFinishedVocab.has(tests[currentTestIndex].id)) {
-                            reviewResult = ReviewResult.Correct
-                        } else {
-                            setHalfFinishedVocab(hfV => {
-                                hfV.add(tests[currentTestIndex].id)
-                                return hfV
-                            })
-                        }
-                    }
-                    break
-            }
-        } else {
-            switch (tests[currentTestIndex].subjectType) {
-                case SubjectType.Vocab:
-                    if ((SUBJECTS[tests[currentTestIndex].id] as Vocab).reading.includes(currentAnswer)) {
-                        if (halfFinishedVocab.has(tests[currentTestIndex].id)) {
-                            reviewResult = ReviewResult.Correct
-                        } else {
-                            setHalfFinishedVocab(hfV => {
-                                hfV.add(tests[currentTestIndex].id)
-                                return hfV
-                            })
-                        }
-                    }
-                    break
-                case SubjectType.Radical:
-                case SubjectType.Kanji:
-                case SubjectType.KanaVocab:
-            }
+                }
+                break
         }
         // TODO: Add reaction to corrct/wrong answers
         User.postReview(tests[currentTestIndex].id, reviewResult)
-        if (currentTestIndex === REVIEW_BATCH_SIZE - 1) {
-            // navigate to '/'
+        console.log(reviewResult)
+        if (currentTestIndex === tests.length - 1) {
+            navigate({ to: "/" })
         } else {
             setCurrentTestIndex(currentTestIndex + 1)
         }

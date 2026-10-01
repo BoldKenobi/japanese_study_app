@@ -29,15 +29,15 @@ const KanjiPage = () => {
             <div className="flex justify-evenly w-full mt-5">
                 {kanji.reading.onyomi.length !== 0 && <div>
                     <p className="text-white text-lg font-bold">On'yomi</p>
-                    {kanji.reading.onyomi.map(reading => <p className="text-white">{reading}</p>)}
+                    {kanji.reading.onyomi.map((reading, i) => <p key={i} className="text-white">{reading}</p>)}
                 </div>}
                 {kanji.reading.kunyomi.length !== 0 && <div>
                     <p className="text-white text-lg font-bold">Kun'yomi</p>
-                    {kanji.reading.kunyomi.map(reading => <p className="text-white">{reading}</p>)}
+                    {kanji.reading.kunyomi.map((reading, i) => <p key={i} className="text-white">{reading}</p>)}
                 </div>}
                 {kanji.reading.nanori.length !== 0 && <div>
                     <p className="text-white text-lg font-bold">Nanori</p>
-                    {kanji.reading.nanori.map(reading => <p className="text-white">{reading}</p>)}
+                    {kanji.reading.nanori.map((reading, i) => <p key={i} className="text-white">{reading}</p>)}
                 </div>}
             </div>
             <p className="mx-8 mt-8 text-white">{kanji.readingMnemonic.replaceAll(/<.*?>/g, "*")}</p>

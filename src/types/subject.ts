@@ -44,5 +44,5 @@ export interface Kanji extends Subject {
 export interface Radical extends Subject {
     type: SubjectType.Radical
     writing: string | null
-    meaning: string
+    meaning: string[]
 }

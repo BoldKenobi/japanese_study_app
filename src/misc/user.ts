@@ -177,7 +177,7 @@ export namespace User {
                     subjectType: SubjectType.Radical,
                     testType: TestType.Meaning,
                     question: (subject as Radical).writing,
-                    possibleAnswers: [(subject as Radical).meaning]
+                    possibleAnswers: (subject as Radical).meaning
                 }]
             case SubjectType.Kanji:
                 return [...tests, {
