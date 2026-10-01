@@ -5,6 +5,7 @@ import MainPage from "./MainPage";
 import Spinner from "../components/Spinner/Spinner";
 import KanjiPage from "./KanjiPage";
 import VocabPage from "./VocabPage";
+import ReviewPage from "./ReviewPage";
 
 export const AppRoute = createRootRouteWithContext<{ client: QueryClient }>()({
     component: App
@@ -33,6 +34,14 @@ export const VocabPageRoute = createRoute({
     getParentRoute: () => AppRoute,
     path: "/vocab/$id",
     component: VocabPage,
+    pendingComponent: () => <div className="h-full w-full flex justify-center items-center"><Spinner /></div>,
+    errorComponent: () => <div>Error</div>,
+})
+
+export const ReviewPageRoute = createRoute({
+    getParentRoute: () => AppRoute,
+    path: "/reviews",
+    component: ReviewPage,
     pendingComponent: () => <div className="h-full w-full flex justify-center items-center"><Spinner /></div>,
     errorComponent: () => <div>Error</div>,
 })

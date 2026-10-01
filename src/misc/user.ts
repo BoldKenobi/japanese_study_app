@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-import { KANJI, MAX_SUBJECT_ID, RADICALS, SUBJECTS, VOCAB } from "../const/subjects";
+import { KANJI, MAX_SUBJECT_ID, RADICALS, REVIEW_BATCH_SIZE, SUBJECTS, VOCAB } from "../const/subjects";
 import moment from "moment";
-import { Level, ReviewResult } from "../types/misc";
+import { Level, ReviewResult, SubjectType, TestType } from "../types/misc";
+import type { Kanji, Radical, Vocab } from "../types/subject";
 
 type Duration = {
     day?: number
@@ -15,10 +16,19 @@ export type SubjectProgress = {
     id: number
 }
 
+export type Test = {
+    id: number,
+    subjectType: SubjectType
+    testType: TestType,
+    question: string
+    possibleAnswers: string[]
+}
+
 export namespace User {
 
     export const getProgress = (): SubjectProgress[] => JSON.parse(localStorage.getItem("review") || "[]")
 
+    // TODO: The add does not seem to be working correctly
     const saveProgress = (progress: SubjectProgress[]) => localStorage.setItem("review", JSON.stringify(progress))
 
     const addReview = (progress: SubjectProgress[], subjectId: number, duration: Duration) => progress[subjectId].nextReview = moment().add(duration).format("YYYY-MM-DD hh:mm")
@@ -27,7 +37,9 @@ export namespace User {
 
     export const init = () => {
         if (getProgress().every(({ level }) => level === Level.LOCKED)) {
-            const progress = new Array(MAX_SUBJECT_ID).fill(0).map((_, id) => ({ id, nextReview: null, level: Level.LOCKED } as SubjectProgress))
+            const progress = new Array(MAX_SUBJECT_ID)
+                .fill(0)
+                .map((_, id) => ({ id, nextReview: null, level: Level.LOCKED } as SubjectProgress))
             saveProgress(progress)
             newSubjects(RADICALS.filter(({ level }) => level === 1).map(({ id }) => id))
         }
@@ -54,36 +66,52 @@ export namespace User {
         }
         saveProgress(progress)
         if (progress[id].level >= Level.III) {
-            newSubjects(SUBJECTS[id].amalgamations.filter(amal_id => SUBJECTS[id].level === SUBJECTS[amal_id].level))
+            newSubjects(SUBJECTS[id].amalgamations
+                .filter(amal_id => SUBJECTS[id].level === SUBJECTS[amal_id].level)
+            )
             if (SUBJECTS[id].type === "kanji") {
-                if (KANJI.filter(({ level }) => level === SUBJECTS[id].level).every(({ id }) => progress[id].level >= Level.III)) {
-                    newSubjects(VOCAB.filter(({ level, type }) => level === SUBJECTS[id].level && type === "kanaVocab").map(({ id }) => id))
+                if (KANJI
+                    .filter(({ level }) => level === SUBJECTS[id].level)
+                    .every(({ id }) => progress[id].level >= Level.III)
+                ) {
+                    newSubjects(VOCAB
+                        .filter(({ level, type }) => level === SUBJECTS[id].level && type === "kanaVocab")
+                        .map(({ id }) => id)
+                    )
                 }
             }
             if (SUBJECTS[id].type === "vocab") {
-                if (VOCAB.filter(({ level }) => level === SUBJECTS[id].level).every(({ id }) => progress[id].level >= Level.III)) {
-                    newSubjects(RADICALS.filter(({ level }) => level === (SUBJECTS[id].level + 1)).map(({ id }) => id))
+                if (VOCAB
+                    .filter(({ level }) => level === SUBJECTS[id].level)
+                    .every(({ id }) => progress[id].level >= Level.III)
+                ) {
+                    newSubjects(RADICALS
+                        .filter(({ level }) => level === (SUBJECTS[id].level + 1))
+                        .map(({ id }) => id)
+                    )
                 }
             }
 
         }
     }
 
-    export const getAvailableReviews = () => getProgress().map((progress, id) => ({ ...progress, id })).filter(({ nextReview }) => nextReview && moment(nextReview).isBefore())
+    export const getAvailableReviews = () => getProgress()
+        .map((progress, id) => ({ ...progress, id }))
+        .filter(({ nextReview }) => nextReview && moment(nextReview).isBefore())
 
-    export const getReviewBatch = (size?: number) => size
-        ? getAvailableReviews().sort(() => 0.5 - Math.random()).slice(0, size)
-        : getAvailableReviews().sort(() => 0.5 - Math.random())
+    const getReviewBatch = (size?: number) => size
+        ? getAvailableReviews().slice(0, size)
+        : getAvailableReviews()
 
     const reviewDuration = (level: Level, result: ReviewResult): Duration => {
         if (result == ReviewResult.Correct) {
             switch (level) {
                 case Level.O:
-                    return { hour: 0 }//1 }
+                    return { hour: 1 }
                 case Level.I:
-                    return { hour: 0 }//3 }
+                    return { hour: 3 }
                 case Level.II:
-                    return { hour: 0 }//8 }
+                    return { hour: 8 }
                 case Level.III:
                     return { day: 1 }
                 case Level.IV:
@@ -134,7 +162,54 @@ export namespace User {
     }
 
     export const resetUser = () => {
-        const progress = new Array(MAX_SUBJECT_ID).fill(0).map((_, id) => ({ id, nextReview: null, level: Level.LOCKED } as SubjectProgress))
+        const progress = new Array(MAX_SUBJECT_ID)
+            .fill(0)
+            .map((_, id) => ({ id, nextReview: null, level: Level.LOCKED } as SubjectProgress))
         saveProgress(progress)
     }
+
+    export const mapReviewBatchToTest = () => getReviewBatch(REVIEW_BATCH_SIZE).reduce((tests, review) => {
+        const subject = SUBJECTS[review.id]
+        switch (subject.type) {
+            case SubjectType.Radical:
+                return [...tests, {
+                    id: review.id,
+                    subjectType: SubjectType.Radical,
+                    testType: TestType.Meaning,
+                    question: subject.writing,
+                    possibleAnswers: [(subject as Radical).meaning]
+                }]
+            case SubjectType.Kanji:
+                return [...tests, {
+                    id: review.id,
+                    subjectType: SubjectType.Kanji,
+                    testType: TestType.Meaning,
+                    question: subject.writing,
+                    possibleAnswers: (subject as Kanji).meaning
+                }]
+            case SubjectType.Vocab:
+                return [...tests, {
+                    id: review.id,
+                    subjectType: SubjectType.Vocab,
+                    testType: TestType.Meaning,
+                    question: subject.writing,
+                    possibleAnswers: (subject as Vocab).meaning
+                }, {
+                    id: review.id,
+                    subjectType: SubjectType.Vocab,
+                    testType: TestType.Reading,
+                    question: subject.writing,
+                    possibleAnswers: (subject as Vocab).reading
+                }]
+            case SubjectType.KanaVocab:
+                return [...tests, {
+                    id: review.id,
+                    subjectType: SubjectType.KanaVocab,
+                    testType: TestType.Meaning,
+                    question: subject.writing,
+                    possibleAnswers: (subject as Vocab).meaning
+                }]
+        }
+    }, [] as Test[]).sort(() => 0.5 - Math.random())
+
 }

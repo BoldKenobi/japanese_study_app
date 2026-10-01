@@ -1,8 +1,10 @@
+import type { SubjectType } from "./misc"
+
 export interface Subject {
     id: number
     level: number
     position: number
-    type: "radical" | "kanji" | "kanaVocab" | "vocab"
+    type: SubjectType
     writing: string
     components: number[]
     amalgamations: number[]
@@ -10,7 +12,7 @@ export interface Subject {
 }
 
 export interface Vocab extends Subject {
-    type: "vocab" | "kanaVocab"
+    type: SubjectType.Vocab | SubjectType.KanaVocab
     reading: string[]
     meaning: string[]
     etymology?: string
@@ -23,7 +25,7 @@ export interface Vocab extends Subject {
 }
 
 export interface Kanji extends Subject {
-    type: "kanji"
+    type: SubjectType.Kanji
     reading: {
         onyomi: string[]
         kunyomi: string[]
@@ -38,6 +40,6 @@ export interface Kanji extends Subject {
 }
 
 export interface Radical extends Subject {
-    type: "radical"
+    type: SubjectType.Radical
     meaning: string
 }

@@ -6,6 +6,11 @@ export enum SubjectType {
     KanaVocab = "kanaVocab"
 }
 
+export enum TestType {
+    Meaning = "meaning",
+    Reading = "reading"
+}
+
 export enum ReviewResult {
     Correct = "correct",
     Wrong = "wrong"
