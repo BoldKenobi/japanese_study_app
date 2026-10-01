@@ -31,7 +31,7 @@ export namespace User {
     // TODO: The add does not seem to be working correctly
     const saveProgress = (progress: SubjectProgress[]) => localStorage.setItem("review", JSON.stringify(progress))
 
-    const addReview = (progress: SubjectProgress[], subjectId: number, duration: Duration) => progress[subjectId].nextReview = moment().add(duration).format("YYYY-MM-DD hh:mm")
+    const addReview = (progress: SubjectProgress[], subjectId: number, duration: Duration) => progress[subjectId].nextReview = moment().add(duration).format("YYYY-MM-DD HH:mm")
 
     export const getSubjectLevel = (id: number) => getProgress()[id].level
 

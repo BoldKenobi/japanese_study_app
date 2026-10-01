@@ -15,8 +15,9 @@ const KanjiPage = () => {
     return <div className="h-full flex flex-col items-center justify-start gap-8 pt-10">
         <Link className="text-white" to="/">To Home</Link>
         <div className="flex flex-col items-center">
-            <div className="w-40 h-40 bg-kanji rounded-[80px] flex items-center justify-center border-2 border-black">
+            <div className="w-40 h-40 bg-kanji rounded-[80px] flex items-center justify-center border-2 border-black relative">
                 <p className="text-7xl text-white">{kanji.writing}</p>
+                <p className="absolute top-1 right-1 bg-gray-400 p-2 w-8 h-8 rounded-2xl flex items-center justify-center text-lg">{level}</p>
             </div>
             <p className="text-4xl text-white mt-5 font-bold">{kanji.meaning[0]}</p>
             <p className="text-xl text-white mt-2">{kanji.meaning.slice(1).join(", ")}</p>
@@ -62,7 +63,6 @@ const KanjiPage = () => {
                 {kanji.amalgamations.map(id => <VocabDisplay key={id} id={id} />)}
             </div>
         </div>
-        <p className="text-white">Level: {level}</p>
     </div>
 }
 
