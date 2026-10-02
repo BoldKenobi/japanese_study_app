@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router"
 import { VocabPageRoute } from "./routes"
 import { SUBJECTS } from "../const/subjects"
 import type { Vocab } from "../types/subject"
@@ -12,7 +11,6 @@ const VocabPage = () => {
     const level = User.getSubjectLevel(+id)
 
     return <div className="h-full flex flex-col items-center justify-start gap-8 pt-10">
-        <Link className="text-white" to="/">To Home</Link>
         <div className="flex flex-col items-center">
             <div className="p-8 bg-vocab rounded-2xl flex items-center justify-center border-2 border-black relative">
                 <p className="text-5xl text-white">{vocab.writing}</p>

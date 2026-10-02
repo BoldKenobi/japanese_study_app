@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router"
 import { KanjiPageRoute } from "./routes"
 import type { Kanji } from "../types/subject"
 import { User } from "../misc/user"
@@ -13,7 +12,6 @@ const KanjiPage = () => {
     const level = User.getSubjectLevel(+id)
 
     return <div className="h-full flex flex-col items-center justify-start gap-8 pt-10">
-        <Link className="text-white" to="/">To Home</Link>
         <div className="flex flex-col items-center">
             <div className="w-40 h-40 bg-kanji rounded-[80px] flex items-center justify-center border-2 border-black relative">
                 <p className="text-7xl text-white">{kanji.writing}</p>

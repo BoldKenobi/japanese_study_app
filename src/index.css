@@ -2,6 +2,7 @@
 
 @import "./components/Spinner/Spinner.css";
 @import "./components/Alerts/Alerts.css";
+@import "./components/IconButton/IconButton.css";
 
 @theme {
     --color-radical: #6CACE4;

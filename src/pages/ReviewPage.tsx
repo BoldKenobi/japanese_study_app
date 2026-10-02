@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router"
+import { useNavigate } from "@tanstack/react-router"
 import { ReviewResult, SubjectType, TestType } from "../types/misc"
 import { useMemo, useState } from "react"
 import * as wanakana from 'wanakana';
@@ -68,7 +68,7 @@ const ReviewPage = () => {
         if (reviewResult === ReviewResult.Correct) {
             addAlert({ type: "success", message: "Correct" })
         } else {
-            addAlert({ type: "error", message: "Incorrect"})
+            addAlert({ type: "error", message: "Incorrect" })
         }
         User.postReview(tests[currentTestIndex].id, reviewResult)
         console.log(reviewResult)
@@ -79,12 +79,11 @@ const ReviewPage = () => {
         }
     }
 
-    return <div className="h-full flex flex-col items-center justify-start pt-10">
-        <Link className="text-white" to="/">To Home</Link>
+    return <div className="h-full flex flex-col items-center justify-start">
         {tests.length > 0 ? <>
             <div
                 style={{ backgroundColor: bgColor(tests[currentTestIndex].subjectType) }}
-                className="mt-8 w-full h-1/4 flex items-center justify-center"
+                className="w-full h-1/3 flex items-center justify-center"
             >
                 <p className="text-white text-5xl">{tests[currentTestIndex].question}</p>
             </div>

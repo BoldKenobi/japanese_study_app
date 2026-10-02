@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router"
 import { SUBJECTS } from "../const/subjects"
 import { User } from "../misc/user"
 import type { Radical } from "../types/subject"
@@ -12,7 +11,6 @@ const RadicalPage = () => {
     const level = User.getSubjectLevel(+id)
 
     return <div className="h-full flex flex-col items-center justify-start gap-8 pt-10">
-        <Link className="text-white" to="/">To Home</Link>
         <div className="flex flex-col items-center">
             <div className="w-40 h-40 bg-radical rounded-[10px] flex items-center justify-center border-2 border-black relative">
                 <p className="text-7xl text-white">{radical.writing}</p>
