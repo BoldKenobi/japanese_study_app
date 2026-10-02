@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useRouter } from "@tanstack/react-router"
 import IconButton from "./components/IconButton/IconButton"
-import { MdChevronLeft, MdDehaze, MdHome } from "react-icons/md"
+import { MdChevronLeft, MdHome } from "react-icons/md"
 import { useEffect } from "react"
 
 const App = () => {
@@ -20,9 +20,9 @@ const App = () => {
                     <MdHome color="white" size={40} />
                 </IconButton>
             </Link>
-            <IconButton>
+            {/* <IconButton>
                 <MdDehaze color="white" size={40} />
-            </IconButton>
+            </IconButton> */}
         </div>
         <div className="grow overflow-scroll">
             <Outlet />

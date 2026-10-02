@@ -6,6 +6,7 @@ import KanjiPage from "./KanjiPage";
 import VocabPage from "./VocabPage";
 import ReviewPage from "./ReviewPage";
 import RadicalPage from "./RadicalPage";
+import LevelPage from "./LevelPage";
 
 export const AppRoute = createRootRouteWithContext<{ client: QueryClient }>()({
     component: App
@@ -43,5 +44,12 @@ export const ReviewPageRoute = createRoute({
     getParentRoute: () => AppRoute,
     path: "/reviews",
     component: ReviewPage,
+    errorComponent: () => <div>Error</div>,
+})
+
+export const LevelPageRoute = createRoute({
+    getParentRoute: () => AppRoute,
+    path: "/level/$level",
+    component: LevelPage,
     errorComponent: () => <div>Error</div>,
 })
