@@ -2,7 +2,6 @@
 import { KANJI, MAX_SUBJECT_ID, RADICALS, REVIEW_BATCH_SIZE, SUBJECTS, VOCAB } from "../const/subjects";
 import moment from "moment";
 import { Level, ReviewResult, SubjectType, TestType } from "../types/misc";
-import type { Kanji, Radical, Vocab } from "../types/subject";
 
 type Duration = {
     day?: number
@@ -28,7 +27,6 @@ export namespace User {
 
     export const getProgress = (): SubjectProgress[] => JSON.parse(localStorage.getItem("review") || "[]")
 
-    // TODO: The add does not seem to be working correctly
     const saveProgress = (progress: SubjectProgress[]) => localStorage.setItem("review", JSON.stringify(progress))
 
     const addReview = (progress: SubjectProgress[], subjectId: number, duration: Duration) => progress[subjectId].nextReview = moment().add(duration).format("YYYY-MM-DD HH:mm")
@@ -37,9 +35,9 @@ export namespace User {
 
     export const init = () => {
         if (getProgress().every(({ level }) => level === Level.LOCKED)) {
-            const progress = new Array(MAX_SUBJECT_ID)
+            const progress: SubjectProgress[] = new Array(MAX_SUBJECT_ID)
                 .fill(0)
-                .map((_, id) => ({ id, nextReview: null, level: Level.LOCKED } as SubjectProgress))
+                .map((_, id) => ({ id, nextReview: null, level: Level.LOCKED }))
             saveProgress(progress)
             newSubjects(RADICALS.filter(({ level }) => level === 1).map(({ id }) => id))
         }
@@ -66,27 +64,32 @@ export namespace User {
         }
         saveProgress(progress)
         if (progress[id].level >= Level.III) {
+            // Unlock subjects dependent on leveled up subject at the same level
             newSubjects(SUBJECTS[id].amalgamations
-                .filter(amal_id => SUBJECTS[id].level === SUBJECTS[amal_id].level)
+                .filter(amal_id => (progress[amal_id].level === Level.LOCKED) && (SUBJECTS[id].level === SUBJECTS[amal_id].level))
             )
-            if (SUBJECTS[id].type === "kanji") {
+            // Unlock kana vocab when leveled up all kanji of the same level
+            if (SUBJECTS[id].type === SubjectType.Kanji) {
                 if (KANJI
                     .filter(({ level }) => level === SUBJECTS[id].level)
                     .every(({ id }) => progress[id].level >= Level.III)
                 ) {
                     newSubjects(VOCAB
-                        .filter(({ level, type }) => level === SUBJECTS[id].level && type === "kanaVocab")
+                        .filter(({ id: newSubjectId, level, type }) => (progress[newSubjectId].level === Level.LOCKED)
+                            && (level === SUBJECTS[id].level) && (type === SubjectType.KanaVocab))
                         .map(({ id }) => id)
                     )
                 }
             }
-            if (SUBJECTS[id].type === "vocab") {
+            // Unlock next levels radicals when all 
+            if (SUBJECTS[id].type === SubjectType.Vocab || SUBJECTS[id].type === SubjectType.KanaVocab) {
                 if (VOCAB
                     .filter(({ level }) => level === SUBJECTS[id].level)
                     .every(({ id }) => progress[id].level >= Level.III)
                 ) {
                     newSubjects(RADICALS
-                        .filter(({ level }) => level === (SUBJECTS[id].level + 1))
+                        .filter(({ id: newSubjectId, level }) => (progress[newSubjectId].level === Level.LOCKED)
+                            && (level === SUBJECTS[id].level + 1))
                         .map(({ id }) => id)
                     )
                 }
@@ -162,9 +165,9 @@ export namespace User {
     }
 
     export const resetUser = () => {
-        const progress = new Array(MAX_SUBJECT_ID)
+        const progress: SubjectProgress[] = new Array(MAX_SUBJECT_ID)
             .fill(0)
-            .map((_, id) => ({ id, nextReview: null, level: Level.LOCKED } as SubjectProgress))
+            .map((_, id) => ({ id, nextReview: null, level: Level.LOCKED }))
         saveProgress(progress)
     }
 
@@ -176,38 +179,38 @@ export namespace User {
                     id: review.id,
                     subjectType: SubjectType.Radical,
                     testType: TestType.Meaning,
-                    question: (subject as Radical).writing,
-                    possibleAnswers: (subject as Radical).meaning
+                    question: subject.writing,
+                    possibleAnswers: subject.meaning
                 }]
             case SubjectType.Kanji:
                 return [...tests, {
                     id: review.id,
                     subjectType: SubjectType.Kanji,
                     testType: TestType.Meaning,
-                    question: (subject as Kanji).writing,
-                    possibleAnswers: (subject as Kanji).meaning
+                    question: subject.writing,
+                    possibleAnswers: subject.meaning
                 }]
             case SubjectType.Vocab:
                 return [...tests, {
                     id: review.id,
                     subjectType: SubjectType.Vocab,
                     testType: TestType.Meaning,
-                    question: (subject as Vocab).writing,
-                    possibleAnswers: (subject as Vocab).meaning
+                    question: subject.writing,
+                    possibleAnswers: subject.meaning
                 }, {
                     id: review.id,
                     subjectType: SubjectType.Vocab,
                     testType: TestType.Reading,
-                    question: (subject as Vocab).writing,
-                    possibleAnswers: (subject as Vocab).reading
+                    question: subject.writing,
+                    possibleAnswers: subject.reading
                 }]
             case SubjectType.KanaVocab:
                 return [...tests, {
                     id: review.id,
                     subjectType: SubjectType.KanaVocab,
                     testType: TestType.Meaning,
-                    question: (subject as Vocab).writing,
-                    possibleAnswers: (subject as Vocab).meaning
+                    question: subject.writing,
+                    possibleAnswers: subject.meaning
                 }]
         }
     }, [] as Test[]).sort(() => 0.5 - Math.random())

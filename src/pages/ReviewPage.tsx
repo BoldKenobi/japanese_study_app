@@ -4,6 +4,7 @@ import { useMemo, useState } from "react"
 import * as wanakana from 'wanakana';
 import { User } from "../misc/user";
 import Spinner from "../components/Spinner/Spinner";
+import { addAlert } from "../components/Alerts/Alerts";
 
 const ReviewPage = () => {
 
@@ -64,6 +65,11 @@ const ReviewPage = () => {
                 break
         }
         // TODO: Add reaction to corrct/wrong answers
+        if (reviewResult === ReviewResult.Correct) {
+            addAlert({ type: "success", message: "Correct" })
+        } else {
+            addAlert({ type: "error", message: "Incorrect"})
+        }
         User.postReview(tests[currentTestIndex].id, reviewResult)
         console.log(reviewResult)
         if (currentTestIndex === tests.length - 1) {
