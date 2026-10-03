@@ -11,7 +11,7 @@ const App = () => {
     useEffect(() => console.log(router.history.location), [router])
 
     return <div className="h-screen w-screen bg-zinc-500 flex flex-col">
-        <div className="h-15 bg-zinc-600 flex items-center justify-between px-5">
+        <div className="min-h-15 bg-zinc-600 flex items-center justify-between px-5">
             {location.pathname !== "/" && <IconButton onClick={router.history.back}>
                 <MdChevronLeft color="white" size={40} />
             </IconButton>}

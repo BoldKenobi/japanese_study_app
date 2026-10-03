@@ -5,14 +5,35 @@ import * as wanakana from 'wanakana';
 import { User } from "../misc/user";
 import Spinner from "../components/Spinner/Spinner";
 import { addAlert } from "../components/Alerts/Alerts";
+import { ReviewPageRoute } from "./routes";
+import RadicalInfo from "../components/RadicalInfo";
+import { SUBJECTS } from "../const/subjects";
+import type { Kanji, Radical, Vocab } from "../types/subject";
+import KanjiInfo from "../components/KanjiInfo";
+import VocabInfo from "../components/VocabInfo";
+import { Button } from "react-aria-components";
 
 const ReviewPage = () => {
 
-    const tests = useMemo(() => User.mapReviewBatchToTest(), [])
-    const navigate = useNavigate({ from: "/reviews" })
+    const testQueue = useMemo(() => User.mapReviewBatchToTest(), [])
+    const lessonQueue = useMemo(() => User.mapReviewBatchToLesson(), [])
+
+    const { type } = ReviewPageRoute.useParams()
+
+    const navigate = useNavigate({ from: "/reviews/$type" })
     const [currentTestIndex, setCurrentTestIndex] = useState(0)
     const [currentAnswer, setCurrentAnswer] = useState("")
     const [halfFinishedVocab, setHalfFinishedVocab] = useState(new Set<number>())
+
+    const queue = type === "test" ? testQueue : lessonQueue
+
+    const nextInQueue = () => {
+        if (currentTestIndex === queue.length - 1) {
+            navigate({ to: "/" })
+        } else {
+            setCurrentTestIndex(currentTestIndex + 1)
+        }
+    }
 
     const bgColor = (type: SubjectType) => {
         switch (type) {
@@ -43,21 +64,21 @@ const ReviewPage = () => {
 
     const onSubmit = () => {
         let reviewResult = ReviewResult.Wrong
-        switch (tests[currentTestIndex].subjectType) {
+        switch (queue[currentTestIndex].subjectType) {
             case SubjectType.Radical:
             case SubjectType.Kanji:
             case SubjectType.KanaVocab:
-                if (tests[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
+                if (queue[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
                     reviewResult = ReviewResult.Correct
                 }
                 break
             case SubjectType.Vocab:
-                if (tests[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
-                    if (halfFinishedVocab.has(tests[currentTestIndex].id)) {
+                if (queue[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
+                    if (halfFinishedVocab.has(queue[currentTestIndex].id)) {
                         reviewResult = ReviewResult.Correct
                     } else {
                         setHalfFinishedVocab(hfV => {
-                            hfV.add(tests[currentTestIndex].id)
+                            hfV.add(queue[currentTestIndex].id)
                             return hfV
                         })
                     }
@@ -70,35 +91,50 @@ const ReviewPage = () => {
         } else {
             addAlert({ type: "error", message: "Incorrect" })
         }
-        User.postReview(tests[currentTestIndex].id, reviewResult)
-        console.log(reviewResult)
-        if (currentTestIndex === tests.length - 1) {
-            navigate({ to: "/" })
-        } else {
-            setCurrentTestIndex(currentTestIndex + 1)
+        User.postReview(queue[currentTestIndex].id, reviewResult)
+        nextInQueue()
+    }
+
+    const subjectInfo = () => {
+        switch (queue[currentTestIndex].subjectType) {
+            case SubjectType.Radical:
+                return <RadicalInfo radical={SUBJECTS[queue[currentTestIndex].id] as Radical} />
+            case SubjectType.Kanji:
+                return <KanjiInfo kanji={SUBJECTS[queue[currentTestIndex].id] as Kanji} />
+            case SubjectType.Vocab:
+            case SubjectType.KanaVocab:
+                return <VocabInfo vocab={SUBJECTS[queue[currentTestIndex].id] as Vocab} />
         }
     }
 
     return <div className="h-full flex flex-col items-center justify-start">
-        {tests.length > 0 ? <>
-            <div
-                style={{ backgroundColor: bgColor(tests[currentTestIndex].subjectType) }}
-                className="w-full h-1/3 flex items-center justify-center"
-            >
-                <p className="text-white text-5xl">{tests[currentTestIndex].question}</p>
-            </div>
-            <form className="bg-gray-400 w-full h-1/6" onSubmit={e => {
-                e.preventDefault()
-                onSubmit()
-                setCurrentAnswer("")
-            }}>
-                <input
-                    type="text"
-                    className="w-full h-full text-center text-3xl"
-                    value={currentAnswer}
-                    onChange={e => onChangeText(e.target.value, tests[currentTestIndex].testType)}
-                />
-            </form>
+        {(queue.length > 0) ? <>
+            {queue[currentTestIndex].testType !== TestType.Learning && <>
+                <div
+                    style={{ backgroundColor: bgColor(queue[currentTestIndex].subjectType) }}
+                    className="w-full h-1/3 flex items-center justify-center"
+                >
+                    <p className="text-white text-5xl">{queue[currentTestIndex].question}</p>
+                </div>
+                <form className="bg-gray-400 w-full h-1/6" onSubmit={e => {
+                    e.preventDefault()
+                    onSubmit()
+                    setCurrentAnswer("")
+                }}>
+                    <input
+                        type="text"
+                        className="w-full h-full text-center text-3xl"
+                        value={currentAnswer}
+                        onChange={e => onChangeText(e.target.value, queue[currentTestIndex].testType)}
+                    />
+                </form>
+            </>}
+            {queue[currentTestIndex].testType === TestType.Learning && <div className="py-8">
+                {subjectInfo()}
+                <div className="flex justify-center items-center mt-5">
+                    <Button className="px-5 py-2 rounded-2xl bg-blue-400" onClick={nextInQueue}>Continue</Button>
+                </div>
+            </div>}
         </> : <Spinner />}
     </div>
 }

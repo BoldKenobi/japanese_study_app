@@ -42,7 +42,7 @@ export const VocabPageRoute = createRoute({
 
 export const ReviewPageRoute = createRoute({
     getParentRoute: () => AppRoute,
-    path: "/reviews",
+    path: "/reviews/$type",
     component: ReviewPage,
     errorComponent: () => <div>Error</div>,
 })

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-namespace */
-import { KANJI, MAX_SUBJECT_ID, RADICALS, REVIEW_BATCH_SIZE, SUBJECTS, VOCAB } from "../const/subjects";
+import { KANJI, LESSON_BATCH_SIZE, MAX_SUBJECT_ID, RADICALS, REVIEW_BATCH_SIZE, SUBJECTS, VOCAB } from "../const/subjects";
 import moment from "moment";
 import { Level, ReviewResult, SubjectType, TestType } from "../types/misc";
 
@@ -22,6 +22,8 @@ export type Test = {
     question: string | null
     possibleAnswers: string[]
 }
+
+export type Lesson = Test
 
 export namespace User {
 
@@ -99,12 +101,16 @@ export namespace User {
     }
 
     export const getAvailableReviews = () => getProgress()
-        .map((progress, id) => ({ ...progress, id }))
+        .filter(({ level }) => level !== 0)
         .filter(({ nextReview }) => nextReview && moment(nextReview).isBefore())
 
-    const getReviewBatch = (size?: number) => size
-        ? getAvailableReviews().slice(0, size)
-        : getAvailableReviews()
+    export const getAvailableLessons = () => getProgress()
+        .filter(({ level }) => level === 0)
+        .filter(({ nextReview }) => nextReview && moment(nextReview).isBefore())
+
+    const getReviewBatch = () => getAvailableReviews().slice(0, REVIEW_BATCH_SIZE)
+
+    const getLessonBatch = () => getAvailableLessons().slice(0, LESSON_BATCH_SIZE) 
 
     const reviewDuration = (level: Level, result: ReviewResult): Duration => {
         if (result == ReviewResult.Correct) {
@@ -137,7 +143,7 @@ export namespace User {
         } else {
             switch (level) {
                 case Level.O:
-                    return { minute: 5 }
+                    return { hour: 1 }
                 case Level.I:
                     return { hour: 1 }
                 case Level.II:
@@ -171,7 +177,7 @@ export namespace User {
         saveProgress(progress)
     }
 
-    export const mapReviewBatchToTest = () => getReviewBatch(REVIEW_BATCH_SIZE).reduce((tests, review) => {
+    export const mapReviewBatchToTest = () => getReviewBatch().reduce((tests, review) => {
         const subject = SUBJECTS[review.id]
         switch (subject.type) {
             case SubjectType.Radical:
@@ -215,4 +221,71 @@ export namespace User {
         }
     }, [] as Test[]).sort(() => 0.5 - Math.random())
 
+    export const mapReviewBatchToLesson = () => getLessonBatch().reduce((lessons, review) => {
+        const subject = SUBJECTS[review.id]
+        switch (subject.type) {
+            case SubjectType.Radical:
+                return [...lessons, {
+                    id: review.id,
+                    subjectType: SubjectType.Radical,
+                    testType: TestType.Learning,
+                    question: "",
+                    possibleAnswers: []
+                }, {
+                    id: review.id,
+                    subjectType: SubjectType.Radical,
+                    testType: TestType.Meaning,
+                    question: subject.writing,
+                    possibleAnswers: subject.meaning
+                }]
+            case SubjectType.Kanji:
+                return [...lessons, {
+                    id: review.id,
+                    subjectType: SubjectType.Kanji,
+                    testType: TestType.Learning,
+                    question: "",
+                    possibleAnswers: []
+                }, {
+                    id: review.id,
+                    subjectType: SubjectType.Kanji,
+                    testType: TestType.Meaning,
+                    question: subject.writing,
+                    possibleAnswers: subject.meaning
+                }]
+            case SubjectType.Vocab:
+                return [...lessons, {
+                    id: review.id,
+                    subjectType: SubjectType.Vocab,
+                    testType: TestType.Learning,
+                    question: "",
+                    possibleAnswers: []
+                }, {
+                    id: review.id,
+                    subjectType: SubjectType.Vocab,
+                    testType: TestType.Meaning,
+                    question: subject.writing,
+                    possibleAnswers: subject.meaning
+                }, {
+                    id: review.id,
+                    subjectType: SubjectType.Vocab,
+                    testType: TestType.Reading,
+                    question: subject.writing,
+                    possibleAnswers: subject.reading
+                }]
+            case SubjectType.KanaVocab:
+                return [...lessons, {
+                    id: review.id,
+                    subjectType: SubjectType.KanaVocab,
+                    testType: TestType.Learning,
+                    question: "",
+                    possibleAnswers: []
+                }, {
+                    id: review.id,
+                    subjectType: SubjectType.KanaVocab,
+                    testType: TestType.Meaning,
+                    question: subject.writing,
+                    possibleAnswers: subject.meaning
+                }]
+        }
+    }, [] as Lesson[])
 }

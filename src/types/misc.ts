@@ -8,7 +8,8 @@ export enum SubjectType {
 
 export enum TestType {
     Meaning = "meaning",
-    Reading = "reading"
+    Reading = "reading",
+    Learning = "learning"
 }
 
 export enum ReviewResult {

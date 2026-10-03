@@ -3,6 +3,7 @@ import { User } from "../misc/user"
 // import KanjiDisplay from "../components/KanjiDisplay"
 import ReviewButton from "../components/ReviewButton"
 import { Link } from "@tanstack/react-router"
+import LessonButton from "../components/LessonButton"
 
 const MainPage = () => {
 
@@ -12,6 +13,7 @@ const MainPage = () => {
 
     return <div className="m-8 flex flex-col gap-5 items-center">
         {/* <KanjiDisplay id={440} /> */}
+        <LessonButton />
         <ReviewButton />
         <hr className="text-white w-9/10" />
         <p className="text-white text-4xl font-bold">Levels:</p>

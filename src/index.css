@@ -9,3 +9,7 @@
     --color-kanji: #991111;
     --color-vocab: #663399;
 }
+
+body {
+    background-color: var(--color-zinc-600);
+}
