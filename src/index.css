@@ -12,6 +12,10 @@
 
 body {
     background-color: var(--color-zinc-600);
+    /* overscroll-behavior: none; */
+}
+
+:root {
     overscroll-behavior: none;
 }
 
