@@ -12,4 +12,9 @@
 
 body {
     background-color: var(--color-zinc-600);
+    overscroll-behavior: none;
+}
+
+button, a, label, input {
+    -webkit-tap-highlight-color: transparent;
 }
