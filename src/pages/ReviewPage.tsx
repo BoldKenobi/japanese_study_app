@@ -107,6 +107,7 @@ const ReviewPage = () => {
         }
     }
 
+    // TODO: Fix keyboard shifting the page up
     return <div className="h-full flex flex-col items-center justify-start">
         {(queue.length > 0) ? <>
             {queue[currentTestIndex].testType !== TestType.Learning && <>

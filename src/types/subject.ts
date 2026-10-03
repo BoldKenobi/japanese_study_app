@@ -1,6 +1,5 @@
 import type { SubjectType } from "./misc"
 
-// TODO: Better typing to remove all the 'as Kanji' etc 
 export type SubjectBase = {
     id: number
     level: number
