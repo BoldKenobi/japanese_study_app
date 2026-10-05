@@ -4,6 +4,7 @@ import { SUBJECTS } from "../const/subjects"
 import VocabDisplay from "../components/VocabDisplay"
 import RadicalDisplay from "../components/RadicalDisplay"
 import KanjiInfo from "../components/KanjiInfo"
+import { User } from "../misc/user"
 
 const KanjiPage = () => {
 
@@ -11,7 +12,8 @@ const KanjiPage = () => {
     const kanji = SUBJECTS[+id] as Kanji
 
     return <div className="h-full flex flex-col items-center justify-start gap-8 pt-10">
-        <KanjiInfo kanji={kanji} />        
+        <KanjiInfo kanji={kanji} />
+        <p className="text-white font-bold">Next Review: {User.getSubjectReview(+id)}</p>
         <hr className="text-white w-9/10" />
         {kanji.etymology && <>
             <div className="flex flex-col items-center">

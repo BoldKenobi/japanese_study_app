@@ -13,6 +13,7 @@ const MainPage = () => {
     return <div className="m-8 flex flex-col gap-5 items-center">
         <LessonButton />
         <ReviewButton />
+        <p className="text-white font-bold">Next Review: {User.getNextReview()}</p>
         <hr className="text-white w-9/10" />
         <p className="text-white text-4xl font-bold">Levels:</p>
         <div className="flex flex-wrap gap-5 justify-evenly mt-5">
