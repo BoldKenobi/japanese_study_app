@@ -24,7 +24,7 @@ const ReviewPage = () => {
     const [currentTestIndex, setCurrentTestIndex] = useState(0)
     const [currentAnswer, setCurrentAnswer] = useState("")
     const [halfFinishedVocab, setHalfFinishedVocab] = useState(new Set<number>())
-    const [keyboard, setKeyboard] = useState(false)
+    // const [keyboard, setKeyboard] = useState(false)
 
     const queue = type === "test" ? testQueue : lessonQueue
 
@@ -115,7 +115,7 @@ const ReviewPage = () => {
                 <div
                     style={{
                         backgroundColor: bgColor(queue[currentTestIndex].subjectType),
-                        height: keyboard ? "20%" : "30%"
+                        // height: keyboard ? "20%" : "30%"
                     }}
                     className="w-full h-1/3 flex items-center justify-center"
                 >
@@ -131,8 +131,12 @@ const ReviewPage = () => {
                         className="w-full h-full text-center text-3xl"
                         value={currentAnswer}
                         onChange={e => onChangeText(e.target.value, queue[currentTestIndex].testType)}
-                        onFocus={() => setKeyboard(true)}
-                        onBlur={() => setKeyboard(false)}
+                        // onFocus={() => setKeyboard(true)}
+                        // onBlur={() => setKeyboard(false)}
+                        onFocus={() => {
+                            window.scrollTo(0, 0)
+                            document.body.scrollTop = 0
+                        }}
                     />
                 </form>
             </>}
