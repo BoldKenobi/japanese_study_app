@@ -70,6 +70,19 @@ export namespace User {
             newSubjects(SUBJECTS[id].amalgamations
                 .filter(amal_id => (progress[amal_id].level === Level.LOCKED) && (SUBJECTS[id].level === SUBJECTS[amal_id].level))
             )
+            // Unlock remaining Kanji when all Radicals are level III
+            if (SUBJECTS[id].type === SubjectType.Radical) {
+                if (RADICALS
+                    .filter(({ level }) => level === SUBJECTS[id].level)
+                    .every(({ id }) => progress[id].level >= Level.III)
+                ) {
+                    newSubjects(KANJI
+                        .filter(({ level, id: unlockId }) => level === SUBJECTS[id].level
+                            && progress[unlockId].level === Level.LOCKED)
+                        .map(({ id }) => id)
+                    )
+                }
+            }
             // Unlock kana vocab when leveled up all kanji of the same level
             if (SUBJECTS[id].type === SubjectType.Kanji) {
                 if (KANJI
@@ -77,21 +90,21 @@ export namespace User {
                     .every(({ id }) => progress[id].level >= Level.III)
                 ) {
                     newSubjects(VOCAB
-                        .filter(({ id: newSubjectId, level, type }) => (progress[newSubjectId].level === Level.LOCKED)
-                            && (level === SUBJECTS[id].level) && (type === SubjectType.KanaVocab))
+                        .filter(({ id: unlockId, level }) => (level === SUBJECTS[id].level)
+                            && (progress[unlockId].level === Level.LOCKED))
                         .map(({ id }) => id)
                     )
                 }
             }
-            // Unlock next levels radicals when all 
+            // Unlock next levels radicals when all vocabs are level III
             if (SUBJECTS[id].type === SubjectType.Vocab || SUBJECTS[id].type === SubjectType.KanaVocab) {
                 if (VOCAB
                     .filter(({ level }) => level === SUBJECTS[id].level)
                     .every(({ id }) => progress[id].level >= Level.III)
                 ) {
                     newSubjects(RADICALS
-                        .filter(({ id: newSubjectId, level }) => (progress[newSubjectId].level === Level.LOCKED)
-                            && (level === SUBJECTS[id].level + 1))
+                        .filter(({ id: unlockId, level }) => (level === SUBJECTS[id].level + 1)
+                            && (progress[unlockId].level === Level.LOCKED))
                         .map(({ id }) => id)
                     )
                 }
@@ -110,7 +123,7 @@ export namespace User {
 
     const getReviewBatch = () => getAvailableReviews().slice(0, REVIEW_BATCH_SIZE)
 
-    const getLessonBatch = () => getAvailableLessons().slice(0, LESSON_BATCH_SIZE) 
+    const getLessonBatch = () => getAvailableLessons().slice(0, LESSON_BATCH_SIZE)
 
     const reviewDuration = (level: Level, result: ReviewResult): Duration => {
         if (result == ReviewResult.Correct) {
