@@ -11,7 +11,7 @@ import { SUBJECTS } from "../const/subjects";
 import type { Kanji, Radical, Vocab } from "../types/subject";
 import KanjiInfo from "../components/KanjiInfo";
 import VocabInfo from "../components/VocabInfo";
-import { Button } from "react-aria-components";
+import { Button, Input } from "react-aria-components";
 
 const ReviewPage = () => {
 
@@ -126,17 +126,17 @@ const ReviewPage = () => {
                     onSubmit()
                     setCurrentAnswer("")
                 }}>
-                    <input
+                    <Input
                         type="text"
                         className="w-full h-full text-center text-3xl"
                         value={currentAnswer}
                         onChange={e => onChangeText(e.target.value, queue[currentTestIndex].testType)}
                         // onFocus={() => setKeyboard(true)}
                         // onBlur={() => setKeyboard(false)}
-                        onFocus={() => {
-                            window.scrollTo(0, 0)
-                            document.body.scrollTop = 0
-                        }}
+                        // onFocus={() => {
+                        //     window.scrollTo(0, 0)
+                        //     document.body.scrollTop = 0
+                        // }}
                     />
                 </form>
             </>}
