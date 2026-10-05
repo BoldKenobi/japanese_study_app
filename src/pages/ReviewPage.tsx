@@ -107,14 +107,14 @@ const ReviewPage = () => {
     }
 
     // TODO: Fix keyboard shifting the page up
-    return <div className="h-full flex flex-col items-center justify-start">
+    return <div className="h-full flex flex-col items-center justify-center">
         {(queue.length > 0) ? <>
             {queue[currentTestIndex].testType !== TestType.Learning && <>
                 <div
                     style={{
                         backgroundColor: bgColor(queue[currentTestIndex].subjectType),
                     }}
-                    className="w-full h-1/4 flex items-center justify-center mt-40"
+                    className="w-full h-1/4 flex items-center justify-center"
                 >
                     <p className="text-white text-5xl">{queue[currentTestIndex].question}</p>
                 </div>
