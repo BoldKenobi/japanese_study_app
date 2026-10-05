@@ -114,7 +114,7 @@ const ReviewPage = () => {
                     style={{
                         backgroundColor: bgColor(queue[currentTestIndex].subjectType),
                     }}
-                    className="w-full h-1/3 flex items-center justify-center"
+                    className="w-full h-1/4 flex items-center justify-center mt-40"
                 >
                     <p className="text-white text-5xl">{queue[currentTestIndex].question}</p>
                 </div>
@@ -128,10 +128,6 @@ const ReviewPage = () => {
                         className="w-full h-full text-center text-3xl"
                         value={currentAnswer}
                         onChange={e => onChangeText(e.target.value, queue[currentTestIndex].testType)}
-                        onClick={() => {
-                            window.scrollTo(0, 0)
-                            document.body.scrollTop = 0
-                        }}
                     />
                 </form>
             </>}

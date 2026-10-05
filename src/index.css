@@ -17,7 +17,6 @@ body {
 
 :root {
     overscroll-behavior: none;
-    overflow: hidden;
 }
 
 button, a, label, input {
