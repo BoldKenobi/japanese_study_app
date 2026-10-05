@@ -13,6 +13,9 @@
 
 body {
     background-color: var(--color-zinc-600);
+}
+
+#root {
     position: fixed;
 }
 
