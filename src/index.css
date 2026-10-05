@@ -13,11 +13,11 @@
 
 body {
     background-color: var(--color-zinc-600);
+    position: fixed;
 }
 
 :root {
     overscroll-behavior: none;
-    position: fixed;
 }
 
 button, a, label, input {
