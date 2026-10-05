@@ -128,7 +128,13 @@ const ReviewPage = () => {
                         className="w-full h-full text-center text-3xl"
                         value={currentAnswer}
                         onChange={e => onChangeText(e.target.value, queue[currentTestIndex].testType)}
-                        onFocus={() => {
+                        onFocus={e => {
+                            e.preventDefault()
+                            window.scrollTo(0, 0)
+                            document.body.scrollTop = 0
+                        }}
+                        onTouchMove={e => {
+                            e.preventDefault()
                             window.scrollTo(0, 0)
                             document.body.scrollTop = 0
                         }}
