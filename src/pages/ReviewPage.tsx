@@ -1,7 +1,6 @@
 import { useNavigate } from "@tanstack/react-router"
-import { ReviewResult, SubjectType, TestType } from "../types/misc"
+import { ReviewResult, SubjectType, TestType, TextInputType } from "../types/misc"
 import { useMemo, useState } from "react"
-import * as wanakana from 'wanakana';
 import { User } from "../misc/user";
 import Spinner from "../components/Spinner/Spinner";
 import { addAlert } from "../components/Alerts/Alerts";
@@ -11,7 +10,8 @@ import { SUBJECTS } from "../const/subjects";
 import type { Kanji, Radical, Vocab } from "../types/subject";
 import KanjiInfo from "../components/KanjiInfo";
 import VocabInfo from "../components/VocabInfo";
-import { Button, Input } from "react-aria-components";
+import { Button } from "react-aria-components";
+import KeyboardInput from "../components/KeyboardInput";
 
 const ReviewPage = () => {
 
@@ -22,7 +22,7 @@ const ReviewPage = () => {
 
     const navigate = useNavigate({ from: "/reviews/$type" })
     const [currentTestIndex, setCurrentTestIndex] = useState(0)
-    const [currentAnswer, setCurrentAnswer] = useState("")
+    // const [currentAnswer, setCurrentAnswer] = useState("")
     const [halfFinishedVocab, setHalfFinishedVocab] = useState(new Set<number>())
     const queue = type === "test" ? testQueue : lessonQueue
 
@@ -46,22 +46,22 @@ const ReviewPage = () => {
         }
     }
 
-    const onChangeText = (text: string, type: TestType) => {
-        if (wanakana.isJapanese(text)) {
-            setCurrentAnswer(text)
-            return
-        }
-        switch (type) {
-            case TestType.Meaning:
-                setCurrentAnswer(text)
-                break
-            case TestType.Reading:
-                setCurrentAnswer(wanakana.toHiragana(wanakana.toRomaji(text)))
-                break
-        }
-    }
+    // const onChangeText = (text: string, type: TestType) => {
+    //     if (wanakana.isJapanese(text)) {
+    //         setCurrentAnswer(text)
+    //         return
+    //     }
+    //     switch (type) {
+    //         case TestType.Meaning:
+    //             setCurrentAnswer(text)
+    //             break
+    //         case TestType.Reading:
+    //             setCurrentAnswer(wanakana.toHiragana(wanakana.toRomaji(text)))
+    //             break
+    //     }
+    // }
 
-    const onSubmit = () => {
+    const onSubmit = (currentAnswer: string) => {
         let reviewResult = ReviewResult.Wrong
         switch (queue[currentTestIndex].subjectType) {
             case SubjectType.Radical:
@@ -90,7 +90,6 @@ const ReviewPage = () => {
                 break
         }
 
-        console.log(queue[currentTestIndex], halfFinishedVocab, reviewResult)
         switch (reviewResult) {
             case ReviewResult.Correct:
                 addAlert({ type: "success", message: "Correct" })
@@ -120,18 +119,19 @@ const ReviewPage = () => {
     }
 
     // TODO: Fix keyboard shifting the page up
-    return <div className="min-h-full flex flex-col items-center justify-center">
+    return <div className="min-h-full flex flex-col items-center justify-between">
         {(queue.length > 0) ? <>
             {queue[currentTestIndex].testType !== TestType.Learning && <>
                 <div
                     style={{
                         backgroundColor: bgColor(queue[currentTestIndex].subjectType),
                     }}
-                    className="w-full h-56 flex items-center justify-center"
+                    className="w-full grow flex items-center justify-center"
                 >
                     <p className="text-white text-5xl">{queue[currentTestIndex].question}</p>
                 </div>
-                <form className="bg-gray-400 w-full h-20" onSubmit={e => {
+                <KeyboardInput type={queue[currentTestIndex].testType === TestType.Meaning ? TextInputType.ENGLISH : TextInputType.HIRAGANA} onSubmit={onSubmit} clearAfterSubmit />
+                {/* <form className="bg-gray-400 w-full h-20" onSubmit={e => {
                     e.preventDefault()
                     onSubmit()
                     setCurrentAnswer("")
@@ -143,7 +143,7 @@ const ReviewPage = () => {
                         onChange={e => onChangeText(e.target.value, queue[currentTestIndex].testType)}
                     />
                 </form>
-                <p className="text-white text-2xl font-bold">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p>
+                <p className="text-white text-2xl font-bold">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p> */}
             </>}
             {queue[currentTestIndex].testType === TestType.Learning && <div className="py-8">
                 {subjectInfo()}
