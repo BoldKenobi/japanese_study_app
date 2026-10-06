@@ -67,15 +67,20 @@ const ReviewPage = () => {
             case SubjectType.Radical:
             case SubjectType.Kanji:
             case SubjectType.KanaVocab:
-                if (queue[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
+                if (queue[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase().trim())) {
                     reviewResult = ReviewResult.Correct
                 }
                 break
             case SubjectType.Vocab:
-                if (queue[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase())) {
+                if (queue[currentTestIndex].possibleAnswers.map(a => a.toLocaleLowerCase()).includes(currentAnswer.toLocaleLowerCase().trim())) {
                     if (halfFinishedVocab.has(queue[currentTestIndex].id)) {
                         reviewResult = ReviewResult.Correct
+                        setHalfFinishedVocab(hfV => {
+                            hfV.delete(queue[currentTestIndex].id)
+                            return hfV
+                        })
                     } else {
+                        reviewResult = ReviewResult.HalfFinished
                         setHalfFinishedVocab(hfV => {
                             hfV.add(queue[currentTestIndex].id)
                             return hfV
@@ -84,13 +89,21 @@ const ReviewPage = () => {
                 }
                 break
         }
-        // TODO: Add reaction to corrct/wrong answers
-        if (reviewResult === ReviewResult.Correct) {
-            addAlert({ type: "success", message: "Correct" })
-        } else {
-            addAlert({ type: "error", message: "Incorrect" })
+
+        console.log(queue[currentTestIndex], halfFinishedVocab, reviewResult)
+        switch (reviewResult) {
+            case ReviewResult.Correct:
+                addAlert({ type: "success", message: "Correct" })
+                User.postReview(queue[currentTestIndex].id, reviewResult)
+                break
+            case ReviewResult.HalfFinished:
+                addAlert({ type: "info", message: "Correct" })
+                break
+            case ReviewResult.Wrong:
+                addAlert({ type: "error", message: `Incorrect: ${queue[currentTestIndex].possibleAnswers.join(", ")}` })
+                User.postReview(queue[currentTestIndex].id, reviewResult)
+                break
         }
-        User.postReview(queue[currentTestIndex].id, reviewResult)
         nextInQueue()
     }
 
@@ -107,18 +120,19 @@ const ReviewPage = () => {
     }
 
     // TODO: Fix keyboard shifting the page up
-    return <div className="h-full flex flex-col items-center justify-center">
+    return <div className="min-h-full flex flex-col items-center justify-center">
         {(queue.length > 0) ? <>
             {queue[currentTestIndex].testType !== TestType.Learning && <>
+                <p className="text-white text-2xl font-bold">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p>
                 <div
                     style={{
                         backgroundColor: bgColor(queue[currentTestIndex].subjectType),
                     }}
-                    className="w-full h-1/4 flex items-center justify-center"
+                    className="w-full h-56 flex items-center justify-center"
                 >
                     <p className="text-white text-5xl">{queue[currentTestIndex].question}</p>
                 </div>
-                <form className="bg-gray-400 w-full h-1/6" onSubmit={e => {
+                <form className="bg-gray-400 w-full h-20" onSubmit={e => {
                     e.preventDefault()
                     onSubmit()
                     setCurrentAnswer("")

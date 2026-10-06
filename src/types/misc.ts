@@ -14,6 +14,7 @@ export enum TestType {
 
 export enum ReviewResult {
     Correct = "correct",
+    HalfFinished = "halfFinished",
     Wrong = "wrong"
 }
 

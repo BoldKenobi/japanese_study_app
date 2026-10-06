@@ -4,10 +4,12 @@ import { User } from "../misc/user"
 import ReviewButton from "../components/ReviewButton"
 import { Link } from "@tanstack/react-router"
 import LessonButton from "../components/LessonButton"
+// import { VOCAB } from "../const/subjects"
 const MainPage = () => {
 
     useEffect(() => {
         User.init()
+        // User.newSubjects(VOCAB.filter(({ level }) =>  level === 1).map(({ id }) => id))
     }, [])
 
     return <div className="m-8 flex flex-col gap-5 items-center">

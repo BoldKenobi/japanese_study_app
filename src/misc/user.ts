@@ -68,7 +68,7 @@ export const init = () => {
 
 // TODO: Make sure reviews are grouped at specific times
 // TODO: Make sure reviews don't bunch up too much
-const newSubjects = (ids: number[]) => {
+export const newSubjects = (ids: number[]) => {
     const progress = getProgress()
     ids.forEach(id => {
         progress[id].level = Level.O
