@@ -31,7 +31,7 @@ export namespace User {
 
     const saveProgress = (progress: SubjectProgress[]) => localStorage.setItem("review", JSON.stringify(progress))
 
-    const addReview = (progress: SubjectProgress[], subjectId: number, duration: Duration) => progress[subjectId].nextReview = moment().add(duration).format("YYYY-MM-DD HH:mm")
+    const addReview = (progress: SubjectProgress[], subjectId: number, duration: Duration) => progress[subjectId].nextReview = moment().add(duration).endOf("h").format("YYYY-MM-DD HH:mm")
 
     export const getSubjectLevel = (id: number) => getProgress()[id].level
 
@@ -66,7 +66,6 @@ export namespace User {
         }
     }
 
-    // TODO: Make sure reviews are grouped at specific times
     // TODO: Make sure reviews don't bunch up too much
     export const newSubjects = (ids: number[]) => {
         const progress = getProgress()
