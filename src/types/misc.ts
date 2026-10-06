@@ -30,14 +30,24 @@ export enum Level {
     VII = 7,
     VIII = 8,
     IX = 9,
-    X = 10
+    X = 10,
+    XI = 11,
+    XII = 12,
+    XIII = 13,
+    XIV = 14,
+    XV = 15,
+    XVI = 16,
+    XVII = 17,
+    XVIII = 18,
+    XIX = 19,
+    XX = 20
 }
 
 export namespace Level {
     export const increase = (level: Level) => {
         level += 1
-        if (level > Level.X) {
-            level = Level.X
+        if (level > Level.XX) {
+            level = Level.XX
         }
         return level
     }

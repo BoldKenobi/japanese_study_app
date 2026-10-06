@@ -123,7 +123,6 @@ const ReviewPage = () => {
     return <div className="min-h-full flex flex-col items-center justify-center">
         {(queue.length > 0) ? <>
             {queue[currentTestIndex].testType !== TestType.Learning && <>
-                <p className="text-white text-2xl font-bold">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p>
                 <div
                     style={{
                         backgroundColor: bgColor(queue[currentTestIndex].subjectType),
@@ -144,6 +143,7 @@ const ReviewPage = () => {
                         onChange={e => onChangeText(e.target.value, queue[currentTestIndex].testType)}
                     />
                 </form>
+                <p className="text-white text-2xl font-bold">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p>
             </>}
             {queue[currentTestIndex].testType === TestType.Learning && <div className="py-8">
                 {subjectInfo()}
