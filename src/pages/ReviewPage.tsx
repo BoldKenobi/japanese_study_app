@@ -126,24 +126,12 @@ const ReviewPage = () => {
                     style={{
                         backgroundColor: bgColor(queue[currentTestIndex].subjectType),
                     }}
-                    className="w-full grow flex items-center justify-center"
+                    className="w-full grow flex items-center justify-center relative"
                 >
                     <p className="text-white text-5xl">{queue[currentTestIndex].question}</p>
+                    <p className="text-white text-2xl font-bold absolute bottom-2">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p>
                 </div>
                 <KeyboardInput type={queue[currentTestIndex].testType === TestType.Meaning ? TextInputType.ENGLISH : TextInputType.HIRAGANA} onSubmit={onSubmit} clearAfterSubmit />
-                {/* <form className="bg-gray-400 w-full h-20" onSubmit={e => {
-                    e.preventDefault()
-                    onSubmit()
-                    setCurrentAnswer("")
-                }}>
-                    <Input
-                        type="text"
-                        className="w-full h-full text-center text-3xl"
-                        value={currentAnswer}
-                        onChange={e => onChangeText(e.target.value, queue[currentTestIndex].testType)}
-                    />
-                </form>
-                <p className="text-white text-2xl font-bold">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p> */}
             </>}
             {queue[currentTestIndex].testType === TestType.Learning && <div className="py-8">
                 {subjectInfo()}
