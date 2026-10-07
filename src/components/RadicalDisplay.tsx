@@ -16,9 +16,22 @@ import elf from "../assets/elf.svg"
 import cactus from "../assets/cactus.svg"
 import satellite from "../assets/satellite.svg"
 import psychopath from "../assets/psychopath.svg"
+import { Level } from "../types/misc"
+import { User } from "../misc/user"
 
 const RadicalDisplay = ({ id }: { id: number }) => {
     const radical = SUBJECTS[id] as Radical
+
+    const level = User.getSubjectLevel(id)
+    const getBgColor = () => {
+        if (level === Level.LOCKED) {
+            return "var(--color-gray-500)"
+        } else if (level < Level.V) {
+            return "#96bddf"
+        } else {
+            return "var(--color-radical)"
+        }
+    }
 
     const getSVGWriting = () => {
         switch (radical.meaning[0]) {
@@ -58,7 +71,7 @@ const RadicalDisplay = ({ id }: { id: number }) => {
     }
 
     // TODO: Delete Radicals: Worm @ 17, Corn @ 23, Egg @ 26, Trident @ 41, 
-    return <Link to="/radical/$id" params={{ id: "" + id }} className="w-15 h-15 bg-radical rounded-[3.75px] flex items-center justify-center border-2 border-black">
+    return <Link to="/radical/$id" style={{backgroundColor: getBgColor()}} params={{ id: "" + id }} className="w-15 h-15 rounded-[3.75px] flex items-center justify-center border-2 border-black">
         {getSVGWriting()}
     </Link>
 }

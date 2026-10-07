@@ -27,13 +27,15 @@ export type Lesson = Test
 
 export namespace User {
 
-    export const getProgress = (): SubjectProgress[] => JSON.parse(localStorage.getItem("review") || "[]")
+    const getProgress = (): SubjectProgress[] => JSON.parse(localStorage.getItem("review") || "[]")
 
     const saveProgress = (progress: SubjectProgress[]) => localStorage.setItem("review", JSON.stringify(progress))
 
     const addReview = (progress: SubjectProgress[], subjectId: number, duration: Duration) => progress[subjectId].nextReview = moment().add(duration).endOf("h").format("YYYY-MM-DD HH:mm")
 
     export const getSubjectLevel = (id: number) => getProgress()[id].level
+
+    export const getCurrentLevel = () => getProgress().filter(({ nextReview }) => !!nextReview).reduce(((maxLevel, { level }) => level > maxLevel ? level : maxLevel), 0)
 
     export const getSubjectReview = (id: number) => {
         const review = getProgress()[id].nextReview
