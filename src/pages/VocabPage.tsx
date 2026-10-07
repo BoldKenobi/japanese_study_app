@@ -4,6 +4,8 @@ import type { Vocab } from "../types/subject"
 import KanjiDisplay from "../components/KanjiDisplay"
 import VocabInfo from "../components/VocabInfo"
 import { User } from "../misc/user"
+import { Button } from "react-aria-components"
+import { ReviewResult } from "../types/misc"
 
 const VocabPage = () => {
 
@@ -19,6 +21,9 @@ const VocabPage = () => {
             <div className="flex justify-evenly flex-wrap gap-5 m-8">
                 {vocab.components.map(id => <KanjiDisplay key={id} id={id} />)}
             </div>
+        </div>
+        <div className="pb-5">
+            <Button className="text-white bg-green-500 rounded-2xl text-2xl p-3" onClick={() => User.postReview(+id, ReviewResult.Correct)}>Increase Level</Button>
         </div>
     </div>
 }

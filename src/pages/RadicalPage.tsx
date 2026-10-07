@@ -4,6 +4,8 @@ import { RadicalPageRoute } from "./routes"
 import KanjiDisplay from "../components/KanjiDisplay"
 import RadicalInfo from "../components/RadicalInfo"
 import { User } from "../misc/user"
+import { Button } from "react-aria-components"
+import { ReviewResult } from "../types/misc"
 
 const RadicalPage = () => {
 
@@ -19,6 +21,9 @@ const RadicalPage = () => {
             <div className="flex justify-evenly flex-wrap gap-5 m-8">
                 {radical.amalgamations.map(id => <KanjiDisplay key={id} id={id} />)}
             </div>
+        </div>
+        <div className="pb-5">
+            <Button className="text-white bg-green-500 rounded-2xl text-2xl p-3" onClick={() => User.postReview(+id, ReviewResult.Correct)}>Increase Level</Button>
         </div>
     </div>
 }

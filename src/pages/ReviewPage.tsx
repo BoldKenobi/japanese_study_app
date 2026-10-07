@@ -22,7 +22,6 @@ const ReviewPage = () => {
 
     const navigate = useNavigate({ from: "/reviews/$type" })
     const [currentTestIndex, setCurrentTestIndex] = useState(0)
-    // const [currentAnswer, setCurrentAnswer] = useState("")
     const [halfFinishedVocab, setHalfFinishedVocab] = useState(new Set<number>())
     const queue = type === "test" ? testQueue : lessonQueue
 
@@ -45,21 +44,6 @@ const ReviewPage = () => {
                 return "var(--color-vocab)"
         }
     }
-
-    // const onChangeText = (text: string, type: TestType) => {
-    //     if (wanakana.isJapanese(text)) {
-    //         setCurrentAnswer(text)
-    //         return
-    //     }
-    //     switch (type) {
-    //         case TestType.Meaning:
-    //             setCurrentAnswer(text)
-    //             break
-    //         case TestType.Reading:
-    //             setCurrentAnswer(wanakana.toHiragana(wanakana.toRomaji(text)))
-    //             break
-    //     }
-    // }
 
     const onSubmit = (currentAnswer: string) => {
         let reviewResult = ReviewResult.Wrong
@@ -118,7 +102,6 @@ const ReviewPage = () => {
         }
     }
 
-    // TODO: Fix keyboard shifting the page up
     return <div className="min-h-full flex flex-col items-center justify-between">
         {(queue.length > 0) ? <>
             {queue[currentTestIndex].testType !== TestType.Learning && <>

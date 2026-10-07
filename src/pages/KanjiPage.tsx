@@ -5,6 +5,8 @@ import VocabDisplay from "../components/VocabDisplay"
 import RadicalDisplay from "../components/RadicalDisplay"
 import KanjiInfo from "../components/KanjiInfo"
 import { User } from "../misc/user"
+import { Button } from "react-aria-components"
+import { ReviewResult } from "../types/misc"
 
 const KanjiPage = () => {
 
@@ -34,6 +36,9 @@ const KanjiPage = () => {
             <div className="flex justify-evenly flex-wrap gap-5 m-8">
                 {kanji.amalgamations.map(id => <VocabDisplay key={id} id={id} />)}
             </div>
+        </div>
+        <div className="pb-5">
+            <Button className="text-white bg-green-500 rounded-2xl text-2xl p-3" onClick={() => User.postReview(+id, ReviewResult.Correct)}>Increase Level</Button>
         </div>
     </div>
 }
