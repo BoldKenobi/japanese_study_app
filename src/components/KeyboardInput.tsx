@@ -21,10 +21,11 @@ const KeboardInput = ({ type, onSubmit, clearAfterSubmit = false }: { type: Text
                 setValue(v => v + char)
                 break
             case TextInputType.HIRAGANA:
-                setValue(v => wanakana.toHiragana(wanakana.toRomaji(v + char)))
+                // setValue(v => wanakana.toHiragana(wanakana.toRomaji(v + char)))
+                setValue(v => wanakana.toHiragana(v + char, { IMEMode: "toHiragana" }))
                 break
             case TextInputType.KATAKANA:
-                setValue(v => wanakana.toKatakana(wanakana.toRomaji(v + char)))
+                setValue(v => wanakana.toKatakana(v + char, { IMEMode: "toKatakana" }))
                 break
         }
         setShift(false)
