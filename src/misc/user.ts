@@ -2,6 +2,7 @@
 import { KANJI, LESSON_BATCH_SIZE, MAX_SUBJECT_ID, RADICALS, REVIEW_BATCH_SIZE, SUBJECTS, VOCAB } from "../const/subjects";
 import moment from "moment";
 import { Level, ReviewResult, SubjectType, TestType } from "../types/misc";
+import { shuffle } from "./utils";
 
 type Duration = {
     day?: number
@@ -143,7 +144,7 @@ export namespace User {
         .filter(({ level }) => level === 0)
         .filter(({ nextReview }) => nextReview && moment(nextReview).isBefore())
 
-    const getReviewBatch = () => getAvailableReviews().slice(0, REVIEW_BATCH_SIZE)
+    const getReviewBatch = () => shuffle(getAvailableReviews()).slice(0, REVIEW_BATCH_SIZE)
 
     const getLessonBatch = () => getAvailableLessons().slice(0, LESSON_BATCH_SIZE)
 
@@ -294,7 +295,7 @@ export namespace User {
                     possibleAnswers: subject.meaning
                 }]
         }
-    }, [] as Test[]).sort(() => 0.5 - Math.random())
+    }, [] as Test[])
 
     export const mapReviewBatchToLesson = () => getLessonBatch().reduce((lessons, review) => {
         const subject = SUBJECTS[review.id]
