@@ -295,7 +295,7 @@ export namespace User {
                     possibleAnswers: subject.meaning
                 }]
         }
-    }, [] as Test[])
+    }, [] as Test[]).sort(() => 0.5 - Math.random())
 
     export const mapReviewBatchToLesson = () => getLessonBatch().reduce((lessons, review) => {
         const subject = SUBJECTS[review.id]
