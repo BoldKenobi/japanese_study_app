@@ -45,7 +45,8 @@ const KeboardInput = ({ type, onSubmit, clearAfterSubmit = false }: { type: Text
                 {"zxcvbnm".split("").map(c => <Button key={c} onClick={() => onNewChar(shift ? c.toLocaleUpperCase() : c)} className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500">{shift ? c.toLocaleUpperCase() : c}</Button>)}
                 <Button className="bg-zinc-400 w-14 h-14 rounded-md text-white flex items-center justify-center active:bg-zinc-500" onClick={() => setValue(v => v.slice(0, -1))}><IoBackspaceOutline size={25} /></Button>
             </div>
-            <div className="flex w-full items-center gap-1 justify-center pl-18">
+            <div className="flex w-full items-center gap-1 justify-center pl-10">
+                <Button className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500" onClick={() => setValue(v => v + "ー")}>ー</Button>
                 <Button className="bg-zinc-400 w-44 h-14 rounded-md active:bg-zinc-500" onClick={() => setValue(v => v + " ")}></Button>
                 <Button className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500" onClick={() => setValue(v => v + ".")}>.</Button>
                 <Button className="bg-blue-400 w-18 h-14 rounded-md text-white flex items-center justify-center active:bg-blue-300" onClick={() => {

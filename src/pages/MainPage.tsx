@@ -14,6 +14,7 @@ const MainPage = () => {
         <LessonButton />
         <ReviewButton />
         <p className="text-white font-bold">Next Review: {User.getNextReview()}</p>
+        {/* <Link to="/test">Test</Link> */}
         <hr className="text-white w-9/10" />
         <p className="text-white text-4xl font-bold">Levels:</p>
         <div className="flex flex-wrap gap-5 justify-evenly mt-5">
