@@ -12,6 +12,21 @@ import KanjiInfo from "../components/KanjiInfo";
 import VocabInfo from "../components/VocabInfo";
 import { Button } from "react-aria-components";
 import KeyboardInput from "../components/KeyboardInput";
+import beggar from "../assets/beggar.svg"
+import kick from "../assets/kick.svg"
+import ribCage from "../assets/ribCage.svg"
+import yurt from "../assets/yurt.svg"
+import pope from "../assets/pope.svg"
+import tofu from "../assets/tofu.svg"
+import creeper from "../assets/creeper.svg"
+import explosion from "../assets/explosion.svg"
+import deathStar from "../assets/deathStar.svg"
+import comb from "../assets/comb.svg"
+import hills from "../assets/hills.svg"
+import elf from "../assets/elf.svg"
+import cactus from "../assets/cactus.svg"
+import satellite from "../assets/satellite.svg"
+import psychopath from "../assets/psychopath.svg"
 
 const ReviewPage = () => {
 
@@ -30,6 +45,47 @@ const ReviewPage = () => {
             navigate({ to: "/" })
         } else {
             setCurrentTestIndex(currentTestIndex + 1)
+        }
+    }
+
+    const getSVGWriting = () => {
+        if (queue[currentTestIndex].subjectType === SubjectType.Radical) {
+            switch (queue[currentTestIndex].possibleAnswers[0]) {
+                case "Beggar":
+                    return <img className="h-12 w-12" src={beggar} />
+                case "Kick":
+                    return <img className="h-12 w-12" src={kick} />
+                case "Rib Cage":
+                    return <img className="h-12 w-12" src={ribCage} />
+                case "Yurt":
+                    return <img className="h-12 w-12" src={yurt} />
+                case "Pope":
+                    return <img className="h-12 w-12" src={pope} />
+                case "Tofu":
+                    return <img className="h-12 w-12" src={tofu} />
+                case "Creeper":
+                    return <img className="h-12 w-12" src={creeper} />
+                case "Explosion":
+                    return <img className="h-12 w-12" src={explosion} />
+                case "Death Star":
+                    return <img className="h-12 w-12" src={deathStar} />
+                case "Comb":
+                    return <img className="h-12 w-12" src={comb} />
+                case "Hills":
+                    return <img className="h-12 w-12" src={hills} />
+                case "Elf":
+                    return <img className="h-12 w-12" src={elf} />
+                case "Cactus":
+                    return <img className="h-12 w-12" src={cactus} />
+                case "Satellite":
+                    return <img className="h-12 w-12" src={satellite} />
+                case "Psychopath":
+                    return <img className="h-12 w-12" src={psychopath} />
+                default:
+                    return <p className="text-5xl text-white">{queue[currentTestIndex].question}</p>
+            }
+        } else {
+            return <p className="text-5xl text-white">{queue[currentTestIndex].question}</p>
         }
     }
 
@@ -111,7 +167,7 @@ const ReviewPage = () => {
                     }}
                     className="w-full grow flex items-center justify-center relative"
                 >
-                    <p className="text-white text-5xl">{queue[currentTestIndex].question}</p>
+                    <p className="text-white text-5xl">{getSVGWriting()}</p>
                     <p className="text-white text-2xl font-bold absolute bottom-2">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p>
                 </div>
                 <KeyboardInput type={queue[currentTestIndex].testType === TestType.Meaning ? TextInputType.ENGLISH : TextInputType.HIRAGANA} onSubmit={onSubmit} clearAfterSubmit />

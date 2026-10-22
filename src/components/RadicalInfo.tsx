@@ -57,7 +57,6 @@ const RadicalInfo = ({ radical }: { radical: Radical }) => {
         }
     }
 
-    // TODO: 19 Radicals have no character, render image instead (also on RadicalDisplay)
     return <div className="flex flex-col items-center justify-start gap-8">
         <div className="flex flex-col items-center">
             <div className="w-40 h-40 bg-radical rounded-[10px] flex items-center justify-center border-2 border-black relative">

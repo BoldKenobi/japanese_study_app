@@ -70,7 +70,7 @@ const RadicalDisplay = ({ id }: { id: number }) => {
         }
     }
 
-    // TODO: Delete Radicals: Worm @ 17, Corn @ 23, Egg @ 26, Trident @ 41, 
+    // TODO: Delete Radicals: Worm @ 17, Corn @ 23, Egg @ 26, Trident @ 41, Ra @ 3
     return <Link to="/radical/$id" style={{backgroundColor: getBgColor()}} params={{ id: "" + id }} className="w-15 h-15 rounded-[3.75px] flex items-center justify-center border-2 border-black">
         {getSVGWriting()}
     </Link>
