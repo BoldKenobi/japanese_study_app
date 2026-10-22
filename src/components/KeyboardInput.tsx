@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button } from "react-aria-components"
+// import { button } from "react-aria-components"
 import { BsShift, BsShiftFill } from "react-icons/bs"
 import { IoIosArrowRoundForward } from "react-icons/io"
 import { IoBackspaceOutline } from "react-icons/io5"
@@ -36,27 +36,27 @@ const KeyboardInput = ({ type, onSubmit, clearAfterSubmit = false }: { type: Tex
         <div className="bg-gray-400 w-full h-20 flex items-center justify-center text-3xl text-white">{value}</div>
         <div className="h-72 w-full bg-zinc-600 flex flex-col items-center gap-3 pt-3">
             <div className="flex w-full items-center gap-1 justify-center">
-                {(special ? "1234567890" : "qwertyuiop").split("").map(c => <Button key={c} onClick={() => onNewChar(shift ? c.toLocaleUpperCase() : c)} className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500 text-2xl">{shift ? c.toLocaleUpperCase() : c}</Button>)}
+                {(special ? "1234567890" : "qwertyuiop").split("").map(c => <button key={c} onClick={() => onNewChar(shift ? c.toLocaleUpperCase() : c)} className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500 text-2xl">{shift ? c.toLocaleUpperCase() : c}</button>)}
             </div>
             <div className="flex w-full items-center gap-1 justify-center">
-                {(special ? "-/:@()「」￥＆" : "asdfghjkl").split("").map(c => <Button key={c} onClick={() => onNewChar(shift ? c.toLocaleUpperCase() : c)} className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500 text-2xl">{shift ? c.toLocaleUpperCase() : c}</Button>)}
+                {(special ? "-/:@()「」￥＆" : "asdfghjkl").split("").map(c => <button key={c} onClick={() => onNewChar(shift ? c.toLocaleUpperCase() : c)} className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500 text-2xl">{shift ? c.toLocaleUpperCase() : c}</button>)}
             </div>
             <div className="flex w-full items-center gap-1 justify-center">
-                <Button className="bg-zinc-400 w-14 h-14 rounded-md text-white flex items-center justify-center active:bg-zinc-500" onClick={() => setShift(s => !s)}>{shift ? <BsShiftFill size={20} /> : <BsShift size={20} />}</Button>
-                {(special ? "・。、？！'," : "zxcvbnm").split("").map(c => <Button key={c} onClick={() => onNewChar(shift ? c.toLocaleUpperCase() : c)} className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500 text-2xl">{shift ? c.toLocaleUpperCase() : c}</Button>)}
-                <Button className="bg-zinc-400 w-14 h-14 rounded-md text-white flex items-center justify-center active:bg-zinc-500" onClick={() => setValue(v => v.slice(0, -1))}><IoBackspaceOutline size={25} /></Button>
+                <button className="bg-zinc-400 w-14 h-14 rounded-md text-white flex items-center justify-center active:bg-zinc-500" onClick={() => setShift(s => !s)}>{shift ? <BsShiftFill size={20} /> : <BsShift size={20} />}</button>
+                {(special ? "・。、？！'," : "zxcvbnm").split("").map(c => <button key={c} onClick={() => onNewChar(shift ? c.toLocaleUpperCase() : c)} className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500 text-2xl">{shift ? c.toLocaleUpperCase() : c}</button>)}
+                <button className="bg-zinc-400 w-14 h-14 rounded-md text-white flex items-center justify-center active:bg-zinc-500" onClick={() => setValue(v => v.slice(0, -1))}><IoBackspaceOutline size={25} /></button>
             </div>
             <div className="flex w-full items-center gap-1 justify-end">
-                <Button className="bg-zinc-400 w-14 h-14 rounded-md text-white active:bg-zinc-500" onClick={() => setSpecial(s => !s)}>#+=</Button>
-                <Button className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500" onClick={() => setValue(v => v + "ー")}>ー</Button>
-                <Button className="bg-zinc-400 w-44 h-14 rounded-md active:bg-zinc-500" onClick={() => setValue(v => v + " ")}></Button>
-                <Button className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500" onClick={() => setValue(v => v + ".")}>.</Button>
-                <Button className="bg-blue-400 w-18 h-14 rounded-md text-white flex items-center justify-center active:bg-blue-300" onClick={() => {
+                <button className="bg-zinc-400 w-14 h-14 rounded-md text-white active:bg-zinc-500" onClick={() => setSpecial(s => !s)}>#+=</button>
+                <button className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500" onClick={() => setValue(v => v + "ー")}>ー</button>
+                <button className="bg-zinc-400 w-44 h-14 rounded-md active:bg-zinc-500" onClick={() => setValue(v => v + " ")}></button>
+                <button className="bg-zinc-400 w-9 h-14 rounded-md text-white active:bg-zinc-500" onClick={() => setValue(v => v + ".")}>.</button>
+                <button className="bg-blue-400 w-18 h-14 rounded-md text-white flex items-center justify-center active:bg-blue-300" onClick={() => {
                     onSubmit(value)
                     if (clearAfterSubmit) {
                         setValue("")
                     }
-                }}><IoIosArrowRoundForward size={30} /></Button>
+                }}><IoIosArrowRoundForward size={30} /></button>
             </div>
         </div>
     </div>

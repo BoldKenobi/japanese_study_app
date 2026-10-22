@@ -16,7 +16,7 @@ const MainPage = () => {
         <p className="text-white font-bold">Next Review: {User.getNextReview()}</p>
         {/* <Link to="/test">Test</Link> */}
         <hr className="text-white w-9/10" />
-        <p className="text-white text-4xl font-bold">Levels:</p>
+        <p className="text-white text-4xl font-bold">Levels</p>
         <div className="flex flex-wrap gap-5 justify-evenly mt-5">
             {new Array(60).fill(0).map((_, i) => <Link key={i} className="text-white text-xl bg-zinc-600 h-12 w-12 rounded-4xl flex justify-center items-center" to="/level/$level" params={{ level: "" + (i + 1) }}>
                 {i + 1}
