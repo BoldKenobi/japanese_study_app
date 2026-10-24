@@ -158,16 +158,18 @@ const ReviewPage = () => {
         }
     }
 
-    return <div className="min-h-full flex flex-col items-center justify-between">
+    return <div className="min-h-full flex flex-col items-start justify-between">
         {(queue.length > 0) ? <>
             {queue[currentTestIndex].testType !== TestType.Learning && <>
+                <hr style={{ width: `${((currentTestIndex - halfFinishedVocab.size) / queue.length) * 100}%` }} className="text-white border-t-2" />
                 <div
                     style={{
                         backgroundColor: bgColor(queue[currentTestIndex].subjectType),
                     }}
                     className="w-full grow flex items-center justify-center relative"
                 >
-                    <p className="text-white text-5xl">{getSVGWriting()}</p>
+                    {/* <p className="text-white text-5xl">{getSVGWriting()}</p> */}
+                    {getSVGWriting()}
                     <p className="text-white text-2xl font-bold absolute bottom-2">{queue[currentTestIndex].testType.toLocaleUpperCase()}</p>
                 </div>
                 <KeyboardInput type={queue[currentTestIndex].testType === TestType.Meaning ? TextInputType.ENGLISH : TextInputType.HIRAGANA} onSubmit={onSubmit} clearAfterSubmit />
